@@ -20,10 +20,12 @@ public class UserMeal {
     public LocalDateTime getDateTime() {
         return dateTime;
     }
-    public LocalDate getDate(){
+
+    public LocalDate getDate() {
         return dateTime.toLocalDate();
     }
-    public LocalTime getTime(){
+
+    public LocalTime getTime() {
         return dateTime.toLocalTime();
     }
 
