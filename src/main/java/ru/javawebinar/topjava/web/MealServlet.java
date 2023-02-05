@@ -21,6 +21,9 @@ public class MealServlet extends HttpServlet {
 
     private static final Logger log = getLogger(UserServlet.class);
 
+    private final static String ALL_MEALS_LIST = "meals.jsp";
+    private final static String EDIT_MEAL = "meal.jsp";
+
     private MealDao dao;
 
     @Override
@@ -36,24 +39,28 @@ public class MealServlet extends HttpServlet {
         if (action == null) {
             //      final List<MealTo> allMeals = MealsUtil.filteredByStreams(MealsUtil.MEALS, MealsUtil.CALORIES_PER_DAY);
             request.setAttribute("meals", MealsUtil.filteredByStreams(dao.readAll(), MealsUtil.CALORIES_PER_DAY));
-            forward = "meals.jsp";
+            forward = ALL_MEALS_LIST;
+            forwardRequest(request, response, forward);
         } else if (action.equalsIgnoreCase("update")) {
-            forward = "meal.jsp";
+            forward = EDIT_MEAL;
             int mealId = Integer.parseInt(request.getParameter("id"));
             Meal meal = dao.findMealById(mealId);
             request.setAttribute("meal", meal);
+            forwardRequest(request, response, forward);
         } else if (action.equalsIgnoreCase("add")) {
-            forward = "meal.jsp";
+            forward = EDIT_MEAL;
+            forwardRequest(request, response, forward);
         } else if (action.equalsIgnoreCase("delete")) {
             int mealId = Integer.parseInt(request.getParameter("id"));
             dao.deleteMeal(mealId);
-            forward = "/meals.jsp";
-            request.setAttribute("meals", MealsUtil.filteredByStreams(dao.readAll(), MealsUtil.CALORIES_PER_DAY));
+            response.sendRedirect("meals");
         }
+
+    }
+
+    private static void forwardRequest(HttpServletRequest request, HttpServletResponse response, String forward) throws ServletException, IOException {
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
-        response.sendRedirect("meals.jsp");
-
     }
 
     @Override
@@ -70,7 +77,7 @@ public class MealServlet extends HttpServlet {
             Integer id = Integer.parseInt(mealId);
             dao.updateMeal(id, dateTime, description, calories);
         }
-        RequestDispatcher view = req.getRequestDispatcher("meals.jsp");
+        RequestDispatcher view = req.getRequestDispatcher(ALL_MEALS_LIST);
         req.setAttribute("meals", MealsUtil.filteredByStreams(dao.readAll(), MealsUtil.CALORIES_PER_DAY));
         view.forward(req, resp);
     }
