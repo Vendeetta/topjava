@@ -13,6 +13,10 @@ public class Meal {
 
     private final int calories;
 
+    public Meal() {
+        this(null, LocalDateTime.now(), "", 0);
+    }
+
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
         this.id = id;
         this.dateTime = dateTime;

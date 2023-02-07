@@ -21,9 +21,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
 
-    private final static String ALL_MEALS_LIST = "meals.jsp";
+    private static final String ALL_MEALS_LIST = "meals.jsp";
 
-    private final static String ADD_EDIT = "updateMeal.jsp";
+    private static final String ADD_EDIT = "updateMeal.jsp";
 
     private MealDao dao;
 
@@ -35,20 +35,22 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
-        Optional<String> act = Optional.ofNullable(request.getParameter("action"));
-        String action = act.orElse("showList");
+        String action = Optional.ofNullable(request.getParameter("action"))
+                .orElse("showList");
         switch (action) {
             case "update": {
                 log.info("update action call");
                 int mealId = getId(request);
                 Meal meal = dao.findById(mealId);
+                request.setAttribute("title", "Edit meal");
                 request.setAttribute("meal", meal);
                 forwardRequest(request, response, ADD_EDIT);
                 break;
             }
             case "add": {
                 log.info("add action call");
-                Meal meal = new Meal(null, LocalDateTime.now(), "", 0);
+                Meal meal = new Meal();
+                request.setAttribute("title", "Add meal");
                 request.setAttribute("meal", meal);
                 forwardRequest(request, response, ADD_EDIT);
                 break;

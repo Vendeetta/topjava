@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>${meal.id == null ? 'Add meal' : 'Edit meal'}</title>
+    <title>${title}</title>
 </head>
 <body>
 <ul style="font-size: large">
@@ -12,7 +12,7 @@
 
 </ul>
 <hr>
-<h2><p>${meal.id == null ? 'Add meal' : 'Edit meal'}</p></h2>
+<h2><p>${title}</p></h2>
 
 <form method="POST" action='meals' name="update">
     <table>
