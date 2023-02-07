@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>Edit meal</title>
+    <title>${meal.id == null ? 'Add meal' : 'Edit meal'}</title>
 </head>
 <body>
 <ul style="font-size: large">
@@ -12,7 +12,7 @@
 
 </ul>
 <hr>
-<h2><p>Edit meal</p></h2>
+<h2><p>${meal.id == null ? 'Add meal' : 'Edit meal'}</p></h2>
 
 <form method="POST" action='meals' name="update">
     <table>
@@ -24,7 +24,7 @@
             </td>
             <td>
                 <input type="datetime-local" size="20" name="dateTime"
-                       value="${meal.dateTime}"/> <br/>
+                       value ="${meal.dateTime}"/>
             </td>
         </tr>
         <td>
