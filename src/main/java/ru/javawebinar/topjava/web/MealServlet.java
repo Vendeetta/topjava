@@ -42,15 +42,13 @@ public class MealServlet extends HttpServlet {
                 log.info("update action call");
                 int mealId = getId(request);
                 Meal meal = dao.findById(mealId);
-                request.setAttribute("title", "Edit meal");
                 request.setAttribute("meal", meal);
                 forwardRequest(request, response, ADD_EDIT);
                 break;
             }
             case "add": {
                 log.info("add action call");
-                Meal meal = new Meal();
-                request.setAttribute("title", "Add meal");
+                Meal meal = new Meal(LocalDateTime.now(), "", 0);
                 request.setAttribute("meal", meal);
                 forwardRequest(request, response, ADD_EDIT);
                 break;

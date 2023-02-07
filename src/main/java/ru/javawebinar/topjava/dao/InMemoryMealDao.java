@@ -38,7 +38,7 @@ public class InMemoryMealDao implements MealDao {
 
     @Override
     public Meal update(Meal meal) {
-        return mealMemoryDataBase.computeIfPresent(meal.getId(), (i, m) -> m = meal);
+        return mealMemoryDataBase.computeIfPresent(meal.getId(), (i, m) -> meal);
     }
 
     @Override

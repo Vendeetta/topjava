@@ -3,6 +3,7 @@
 <%@taglib uri="http://topjava.ru/functions" prefix="f" %>
 
 <html>
+<c:set var="title" value="${meal.id == null ? 'Add meal' : 'Edit meal'}"/>
 <head>
     <title>${title}</title>
 </head>
