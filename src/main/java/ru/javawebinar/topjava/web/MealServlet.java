@@ -48,8 +48,8 @@ public class MealServlet extends HttpServlet {
             }
             case "add": {
                 log.info("add action call");
-                LocalDateTime currentDate = LocalDateTime.now();
-                request.setAttribute("date", currentDate);
+                Meal meal = new Meal(null, LocalDateTime.now(), "", 0);
+                request.setAttribute("meal", meal);
                 forwardRequest(request, response, ADD_EDIT);
                 break;
             }

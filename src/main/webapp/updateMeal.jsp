@@ -24,7 +24,7 @@
             </td>
             <td>
                 <input type="datetime-local" size="20" name="dateTime"
-                       value ="${meal.dateTime}"/>
+                       value ="${f : formatLocalDateTime(meal.dateTime)}"/>
             </td>
         </tr>
         <td>
