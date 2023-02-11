@@ -10,5 +10,14 @@
     <li><a href="users">Users</a></li>
     <li><a href="meals">Meals</a></li>
 </ul>
+<br><br>
+<form method="get" action="users">
+    <input type="text" name="action" value="setUserId" hidden="hidden">
+    <select name="userId">
+        <option value="1">User id 1</option>
+        <option value="2">User id 2</option>
+    </select>
+    <button type="submit">Выбрать</button>
+</form>
 </body>
 </html>
