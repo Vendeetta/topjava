@@ -32,10 +32,10 @@
             </tr>
             <tr>
                 <input type="text" name="action" value="filter" hidden="hidden">
-                <th><input type="date" name="startDate"></th>
-                <th><input type="date" name="endDate"></th>
-                <th><input type="time" name="startTime"></th>
-                <th><input type="time" name="endTime"></th>
+                <th><input type="date" name="startDate" value="${start.toLocalDate()}"></th>
+                <th><input type="date" name="endDate" value="${end.toLocalDate()}"></th>
+                <th><input type="time" name="startTime" value="${start.toLocalTime()}"></th>
+                <th><input type="time" name="endTime" value="${end.toLocalTime()}"></th>
             </tr>
         </table>
         <button type="submit">Отфильтровать</button>

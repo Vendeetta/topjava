@@ -9,7 +9,7 @@ public class DateTimeUtil {
     public static boolean isBetweenHalfOpen(LocalDateTime lt, LocalDateTime startTime, LocalDateTime endTime) {
         return !lt.toLocalDate().isBefore(startTime.toLocalDate()) &&
                 !lt.toLocalTime().isBefore(startTime.toLocalTime()) &&
-                lt.toLocalDate().isBefore(endTime.toLocalDate()) &&
+                !lt.toLocalDate().isAfter(endTime.toLocalDate()) &&
                 lt.toLocalTime().isBefore(endTime.toLocalTime());
     }
 

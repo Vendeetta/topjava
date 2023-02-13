@@ -2,13 +2,9 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletException;
@@ -21,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-import java.util.Optional;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
@@ -46,16 +41,14 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
         log.info("doPost method call with param id={}", id);
-        int userId = SecurityUtil.authUserId();
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                userId,
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
-        if(meal.isNew()){
+        if (meal.isNew()) {
             controller.create(meal);
         } else {
             controller.update(meal, meal.getId());
@@ -79,25 +72,27 @@ public class MealServlet extends HttpServlet {
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000)
-                          : controller.get(getId(request));
+                        : controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
             case "filter":
                 log.info("startDate is {}", request.getParameter("startDate"));
                 String startDateParam = request.getParameter("startDate");
-                LocalDate startDate = startDateParam.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDateParam);
+                LocalDate startDate = startDateParam.isEmpty() ? null : LocalDate.parse(startDateParam);
 
                 String endDateParam = request.getParameter("endDate");
-                LocalDate endDate = endDateParam.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDateParam);
+                LocalDate endDate = endDateParam.isEmpty() ? null : LocalDate.parse(endDateParam);
 
                 String startTimeParam = request.getParameter("startTime");
-                LocalTime startTime = startTimeParam.isEmpty() ? LocalTime.MIN : LocalTime.parse(startTimeParam);
+                LocalTime startTime = startTimeParam.isEmpty() ? null : LocalTime.parse(startTimeParam);
 
                 String endTimeParam = request.getParameter("endTime");
-                LocalTime endTime = endTimeParam.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTimeParam);
+                LocalTime endTime = endTimeParam.isEmpty() ? null : LocalTime.parse(endTimeParam);
 
                 request.setAttribute("meals", controller.getAllFilteredByTime(startDate, endDate, startTime, endTime));
+                request.setAttribute("start", LocalDateTime.of(startDate == null ? LocalDate.MIN : startDate, startTime == null ? LocalTime.MIN : startTime));
+                request.setAttribute("end", LocalDateTime.of(endDate == null ? LocalDate.MAX : endDate, endTime == null ? LocalTime.MAX : endTime));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
             case "all":

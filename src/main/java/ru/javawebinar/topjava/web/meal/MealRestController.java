@@ -36,7 +36,11 @@ public class MealRestController {
 
     public List<MealTo> getAllFilteredByTime(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("MealRestController#getAllFiltered called");
-        return MealsUtil.getFilteredTos(service.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay(),
+        startDate = startDate == null ? LocalDate.MIN : startDate;
+        endDate = endDate == null ? LocalDate.MAX : endDate;
+        startTime = startTime == null ? LocalTime.MIN : startTime;
+        endTime = endTime == null ? LocalTime.MAX : endTime;
+        return service.getAllFilteredByTime(SecurityUtil.authUserId(), SecurityUtil.authUserCaloriesPerDay(),
                 LocalDateTime.of(startDate, startTime), LocalDateTime.of(endDate, endTime));
     }
 
@@ -48,7 +52,7 @@ public class MealRestController {
     public Meal create(Meal meal) {
         log.info("create {}", meal);
         checkNew(meal);
-        return service.create(meal);
+        return service.create(meal, SecurityUtil.authUserId());
     }
 
     public void delete(int id) {
@@ -59,6 +63,6 @@ public class MealRestController {
     public void update(Meal meal, int id) {
         log.info("update {} with id={}", meal, id);
         assureIdConsistent(meal, id);
-        service.update(meal);
+        service.update(meal, SecurityUtil.authUserId());
     }
 }
