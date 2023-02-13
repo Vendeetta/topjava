@@ -1,3 +1,6 @@
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalTime" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -32,10 +35,27 @@
             </tr>
             <tr>
                 <input type="text" name="action" value="filter" hidden="hidden">
-                <th><input type="date" name="startDate" value="${start.toLocalDate()}"></th>
-                <th><input type="date" name="endDate" value="${end.toLocalDate()}"></th>
-                <th><input type="time" name="startTime" value="${start.toLocalTime()}"></th>
-                <th><input type="time" name="endTime" value="${end.toLocalTime()}"></th>
+                <%
+                    String startD = request.getParameter("startDate");
+                    LocalDate startDate = (startD == null) || startD.isEmpty() ? LocalDate.MIN : LocalDate.parse(startD, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                %>
+                <th><input type="date" name="startDate" value="<%=startDate%>"></th>
+                <%
+                    String endD = request.getParameter("endDate");
+                    LocalDate endDate = (endD == null) || endD.isEmpty() ? LocalDate.MAX : LocalDate.parse(endD, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                %>
+                <th><input type="date" name="endDate" value="<%=endDate%>"></th>
+                <%
+                    String startT = request.getParameter("startTime");
+                    LocalTime startTime = (startT == null) || startT.isEmpty() ? LocalTime.MAX : LocalTime.parse(startT, DateTimeFormatter.ofPattern("HH:mm"));
+                %>
+                <th><input type="time" name="startTime"
+                           value="<%=startTime%>"></th>
+                <%
+                    String endT = request.getParameter("endTime");
+                    LocalTime endTime = (endT == null) || endT.isEmpty() ? LocalTime.MAX : LocalTime.parse(endT, DateTimeFormatter.ofPattern("HH:mm"));
+                %>
+                <th><input type="time" name="endTime" value="<%=endTime%>"></th>
             </tr>
         </table>
         <button type="submit">Отфильтровать</button>

@@ -8,7 +8,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,7 +43,7 @@ public class MealService {
     }
 
     public List<MealTo> getAllFilteredByTime(int userId, int caloriesPerDay, LocalDateTime start, LocalDateTime end) {
-        return MealsUtil.getFilteredTos(repository.getAllFilteredByTime(userId, start, end), caloriesPerDay, start, end);
+        return MealsUtil.getFilteredTos(repository.getAllFilteredByTime(userId, start.toLocalDate(), end.toLocalDate()), caloriesPerDay, start.toLocalTime(), end.toLocalTime());
     }
 
     public void update(Meal meal, int userId) {
