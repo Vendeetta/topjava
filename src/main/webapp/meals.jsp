@@ -35,27 +35,10 @@
             </tr>
             <tr>
                 <input type="text" name="action" value="filter" hidden="hidden">
-                <%
-                    String startD = request.getParameter("startDate");
-                    LocalDate startDate = (startD == null) || startD.isEmpty() ? LocalDate.MIN : LocalDate.parse(startD, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                %>
-                <th><input type="date" name="startDate" value="<%=startDate%>"></th>
-                <%
-                    String endD = request.getParameter("endDate");
-                    LocalDate endDate = (endD == null) || endD.isEmpty() ? LocalDate.MAX : LocalDate.parse(endD, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                %>
-                <th><input type="date" name="endDate" value="<%=endDate%>"></th>
-                <%
-                    String startT = request.getParameter("startTime");
-                    LocalTime startTime = (startT == null) || startT.isEmpty() ? LocalTime.MAX : LocalTime.parse(startT, DateTimeFormatter.ofPattern("HH:mm"));
-                %>
-                <th><input type="time" name="startTime"
-                           value="<%=startTime%>"></th>
-                <%
-                    String endT = request.getParameter("endTime");
-                    LocalTime endTime = (endT == null) || endT.isEmpty() ? LocalTime.MAX : LocalTime.parse(endT, DateTimeFormatter.ofPattern("HH:mm"));
-                %>
-                <th><input type="time" name="endTime" value="<%=endTime%>"></th>
+                <th><input type="date" name="startDate" value="${param.startDate}"></th>
+                <th><input type="date" name="endDate" value="${param.endDate}"></th>
+                <th><input type="time" name="startTime" value="${param.startTime}"></th>
+                <th><input type="time" name="endTime" value="${param.endTime}"></th>
             </tr>
         </table>
         <button type="submit">Отфильтровать</button>
