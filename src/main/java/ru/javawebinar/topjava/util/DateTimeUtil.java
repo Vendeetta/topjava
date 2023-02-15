@@ -12,7 +12,7 @@ public class DateTimeUtil {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) < 0;
     }
 
-    public static boolean sortByDate(LocalDate date, LocalDate start, LocalDate end) {
+    public static boolean isBetweenDate(LocalDate date, LocalDate start, LocalDate end) {
         return !date.isBefore(start) && !date.isAfter(end);
     }
 

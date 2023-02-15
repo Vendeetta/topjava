@@ -34,8 +34,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Meal save(Meal meal, int userId) {
         meal.setUserId(userId);
-        repository.computeIfAbsent(userId, user -> new ConcurrentHashMap<>());
-        Map<Integer, Meal> userMeals = repository.get(userId);
+        Map<Integer, Meal> userMeals = repository.computeIfAbsent(userId, aMeal -> new ConcurrentHashMap<>());;
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             userMeals.put(meal.getId(), meal);
@@ -52,7 +51,7 @@ public class InMemoryMealRepository implements MealRepository {
             return false;
         }
         Meal meal = userMeals.get(id);
-        if (meal == null || meal.getUserId() != userId) {
+        if (meal == null) {
             return false;
         }
         return userMeals.remove(id) != null;
@@ -65,7 +64,7 @@ public class InMemoryMealRepository implements MealRepository {
             return null;
         }
         Meal meal = userMeals.get(id);
-        if (meal == null || meal.getUserId() != userId) {
+        if (meal == null) {
             log.info("No meal {} w id {} or wrong userId {}", meal, id, userId);
             return null;
         }
@@ -79,7 +78,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAllFilteredByDate(int userId, LocalDate start, LocalDate end) {
-        return filteredByPredicate(userId, meal -> DateTimeUtil.sortByDate(meal.getDate(), start, end));
+        return filteredByPredicate(userId, meal -> DateTimeUtil.isBetweenDate(meal.getDate(), start, end));
     }
 
     private List<Meal> filteredByPredicate(int userId, Predicate<Meal> filter) {
