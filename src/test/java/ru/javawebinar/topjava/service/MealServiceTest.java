@@ -14,7 +14,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -38,7 +37,7 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() {
-        assertThrows(NotFoundException.class, () -> service.get(UserTestData.NOT_FOUND, UserTestData.USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, UserTestData.USER_ID));
     }
 
     @Test
@@ -54,7 +53,7 @@ public class MealServiceTest {
 
     @Test
     public void deleteNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(UserTestData.NOT_FOUND, UserTestData.USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, UserTestData.USER_ID));
     }
 
     @Test
@@ -64,20 +63,16 @@ public class MealServiceTest {
 
     @Test
     public void getBetweenInclusive() {
-        LocalDate start = LocalDate.of(2023, 4, 15);
-        LocalDate end = LocalDate.of(2023, 4, 16);
+        LocalDate start = LocalDate.of(2023, 4, 13);
+        LocalDate end = LocalDate.of(2023, 4, 14);
         List<Meal> resultList = service.getBetweenInclusive(start, end, UserTestData.USER_ID);
-        assertMatch(resultList, lunch);
+        assertMatch(resultList, testMeal);
     }
 
     @Test
     public void getAll() {
-        List<Meal> meals = service.getAll(UserTestData.USER_ID);
-        List<Meal> testedMeals = new ArrayList<>();
-        testedMeals.add(lunch);
-        testedMeals.add(dinner);
-        testedMeals.add(breakfast);
-        assertMatch(meals, testedMeals);
+        List<Meal> meals = service.getAll(100000);
+        assertMatch(meals, testMeal, dinner, lunch, breakfast);
     }
 
     @Test
@@ -89,7 +84,7 @@ public class MealServiceTest {
 
     @Test
     public void updateNotFound() {
-        Meal nonExistentMeal = new Meal(111, LocalDateTime.now(), "test", 100);
+        Meal nonExistentMeal = new Meal(NOT_FOUND, LocalDateTime.now(), "test", 100);
         assertThrows(NotFoundException.class, () -> service.update(nonExistentMeal, UserTestData.USER_ID));
     }
 
