@@ -10,10 +10,6 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
     public static final int MEAL_ID = START_SEQ + 3;
-    public static final int USER_ID = 100000;
-    public static final int ADMIN_ID = 100001;
-    public static final int NOT_FOUND = 1;
-
     public static final Meal breakfast = new Meal(START_SEQ + 3, LocalDateTime.of(2023, 4, 12, 10, 0, 0), "Завтрак", 500);
     public static final Meal lunch = new Meal(START_SEQ + 4, LocalDateTime.of(2023, 4, 16, 11, 0, 0), "Обед", 500);
     public static final Meal dinner = new Meal(START_SEQ + 5, LocalDateTime.of(2023, 4, 12, 13, 0, 0), "Ужин", 999);
@@ -25,7 +21,7 @@ public class MealTestData {
         Meal meal = new Meal(breakfast);
         meal.setDescription("newDescription");
         meal.setCalories(987);
-        meal.setDateTime(LocalDateTime.of(2020, 10, 12, 10, 11, 00));
+        meal.setDateTime(LocalDateTime.of(2020, 10, 12, 10, 11, 0));
         return meal;
     }
 
