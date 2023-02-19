@@ -17,13 +17,16 @@ import java.util.List;
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 automatic resource management (ARM)
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("/spring/inMemory-spring-app.xml")) {
+        try (
+                ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("/spring/in-memory-spring-app.xml");
+                ConfigurableApplicationContext appCtxMain = new ClassPathXmlApplicationContext("classpath:spring/spring-app.xml", "classpath:spring/spring-db.xml")
+        ) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
             System.out.println();
 
-            MealRestController mealController = appCtx.getBean(MealRestController.class);
+            MealRestController mealController = appCtxMain.getBean(MealRestController.class);
             List<MealTo> filteredMealsWithExcess =
                     mealController.getBetween(
                             LocalDate.of(2020, Month.JANUARY, 30), LocalTime.of(7, 0),

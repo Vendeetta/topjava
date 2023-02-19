@@ -71,7 +71,7 @@ public class MealServiceTest {
 
     @Test
     public void getAll() {
-        List<Meal> meals = service.getAll(100000);
+        List<Meal> meals = service.getAll(UserTestData.USER_ID);
         assertMatch(meals, testMeal, dinner, lunch, breakfast);
     }
 
