@@ -1,14 +1,12 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.AssumptionViolatedException;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +20,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -39,39 +36,40 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
-    private static String watchedLog;
+    private static final StringBuilder ALL_TESTS_RESULT_TIME = new StringBuilder("\n");
 
-    private static long startTime;
-
-    private static long endTime;
-
-    private static Map<String, String> result = new HashMap<>();
+    private static void logInfo(Description description, String status, long nanos) {
+        log.info("Test {} {}, spent {} ms",
+                description.getMethodName(), status, TimeUnit.NANOSECONDS.toMillis(nanos));
+    }
 
     @Rule
-    public final TestRule watchman = new TestWatcher() {
+    public Stopwatch stopwatch = new Stopwatch() {
         @Override
-        protected void starting(Description description) {
-            startTime = System.currentTimeMillis();
-            watchedLog = "";
+        protected void succeeded(long nanos, Description description) {
+            logInfo(description, "succeeded", nanos);
         }
 
         @Override
-        public Statement apply(Statement base, Description description) {
-            endTime = System.currentTimeMillis();
-            watchedLog = description.getMethodName() + " execution time = " + (endTime - startTime) + "ms";
-            result.put(description.getMethodName(), (endTime - startTime) + "");
-            return base;
+        protected void failed(long nanos, Throwable e, Description description) {
+            logInfo(description, "failed", nanos);
+        }
+
+        @Override
+        protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
+            logInfo(description, "skipped", nanos);
+        }
+
+        @Override
+        protected void finished(long nanos, Description description) {
+            ALL_TESTS_RESULT_TIME.append(String.format("%-25s %1d ms\n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
+            logInfo(description, "finished", nanos);
         }
     };
 
-    @After
-    public void eachMethodExecuteTime() {
-        log.info(watchedLog);
-    }
-
     @AfterClass
     public static void result() {
-        result.forEach((k, v) -> log.info("{} execute time = {} ms", k, v));
+        log.info(ALL_TESTS_RESULT_TIME.toString());
     }
 
     @Autowired

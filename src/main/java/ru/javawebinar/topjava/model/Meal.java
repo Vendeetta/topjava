@@ -1,25 +1,25 @@
 package ru.javawebinar.topjava.model;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Transactional
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
-        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m SET m.description =:description, m.calories =:calories," +
-                "m.dateTime=:dateTime WHERE m.id=:id AND m.user.id=:userId"),
         @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC "),
         @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.user.id=:userId and m.id=:id"),
-        @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId and m.dateTime >=:start and m.dateTime <:end ORDER BY m.dateTime DESC "),
+        @NamedQuery(name = Meal.BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId " +
+                "and m.dateTime >=:start and m.dateTime <:end ORDER BY m.dateTime DESC "),
 })
 @Entity
-@Table(name = "meal")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "meal", uniqueConstraints =
+@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meal_unique_user_datetime"))
 public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
     public static final String UPDATE = "Meal.update";
@@ -27,16 +27,22 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET = "Meal.get";
     public static final String BETWEEN_HALF_OPEN = "Meal.betweenHalfOpen";
 
-    @Column(name = "date_time")
+    @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
-    @Column(name = "description")
+
+    @Column(name = "description", nullable = false)
     @NotBlank
+    @Size(min = 2, max = 120)
     private String description;
-    @Column(name = "calories")
+
+    @Column(name = "calories", nullable = false)
+    @Range(min = 10, max = 5000)
     private int calories;
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
 
     public Meal() {
