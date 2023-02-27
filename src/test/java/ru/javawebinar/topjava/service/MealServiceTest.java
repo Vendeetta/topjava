@@ -1,8 +1,16 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Ignore;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,6 +22,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -26,8 +36,43 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@Ignore
 public class MealServiceTest {
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+
+    private static String watchedLog;
+
+    private static long startTime;
+
+    private static long endTime;
+
+    private static Map<String, String> result = new HashMap<>();
+
+    @Rule
+    public final TestRule watchman = new TestWatcher() {
+        @Override
+        protected void starting(Description description) {
+            startTime = System.currentTimeMillis();
+            watchedLog = "";
+        }
+
+        @Override
+        public Statement apply(Statement base, Description description) {
+            endTime = System.currentTimeMillis();
+            watchedLog = description.getMethodName() + " execution time = " + (endTime - startTime) + "ms";
+            result.put(description.getMethodName(), (endTime - startTime) + "");
+            return base;
+        }
+    };
+
+    @After
+    public void eachMethodExecuteTime() {
+        log.info(watchedLog);
+    }
+
+    @AfterClass
+    public static void result() {
+        result.forEach((k, v) -> log.info("{} execute time = {} ms", k, v));
+    }
 
     @Autowired
     private MealService service;
