@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
-import org.junit.AssumptionViolatedException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Stopwatch;
@@ -36,40 +35,25 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
-    private static final StringBuilder ALL_TESTS_RESULT_TIME = new StringBuilder("\n");
-
-    private static void logInfo(Description description, String status, long nanos) {
-        log.info("Test {} {}, spent {} ms",
-                description.getMethodName(), status, TimeUnit.NANOSECONDS.toMillis(nanos));
-    }
+    private static final StringBuilder allTestsResultTime = new StringBuilder("\n");
 
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
-        @Override
-        protected void succeeded(long nanos, Description description) {
-            logInfo(description, "succeeded", nanos);
-        }
-
-        @Override
-        protected void failed(long nanos, Throwable e, Description description) {
-            logInfo(description, "failed", nanos);
-        }
-
-        @Override
-        protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
-            logInfo(description, "skipped", nanos);
+        private void logInfo(Description description, String status, long nanos) {
+            log.info("{} - spent time {} ms",
+                    description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
         }
 
         @Override
         protected void finished(long nanos, Description description) {
-            ALL_TESTS_RESULT_TIME.append(String.format("%-25s %1d ms\n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
+            allTestsResultTime.append(String.format("%-25s %1d ms\n", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos)));
             logInfo(description, "finished", nanos);
         }
     };
 
     @AfterClass
     public static void result() {
-        log.info(ALL_TESTS_RESULT_TIME.toString());
+        log.info(allTestsResultTime.toString());
     }
 
     @Autowired
