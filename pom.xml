@@ -12,23 +12,19 @@
     <url>http://topjava.herokuapp.com/</url>
 
     <properties>
-        <!--DB-->
-        <postgresql.version>42.5.3</postgresql.version>
-        <!--    Tests  -->
-        <junit.version>4.13.2</junit.version>
-        <assertj.version>3.24.2</assertj.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring.version>5.3.25</spring.version>
+        <postgresql.version>42.5.3</postgresql.version>
+        <junit.version>4.13.2</junit.version>
+        <assertj.version>3.24.2</assertj.version>
         <java.version>12</java.version>
-        <!-- Hibernate -->
         <hibernate.version>5.6.15.Final</hibernate.version>
         <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
         <javax-el.version>3.0.1-b12</javax-el.version>
-        <!-- Logging -->
         <logback.version>1.2.11</logback.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <java.version>1.8</java.version>
     </properties>
 
     <build>
