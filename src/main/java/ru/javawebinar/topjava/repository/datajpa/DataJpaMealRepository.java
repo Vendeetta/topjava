@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -10,34 +11,49 @@ import java.util.List;
 @Repository
 public class DataJpaMealRepository implements MealRepository {
 
-    private final CrudMealRepository crudRepository;
+    private final CrudMealRepository mealCrudRepository;
+    private final CrudUserRepository userCrudRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository) {
-        this.crudRepository = crudRepository;
+    public DataJpaMealRepository(CrudMealRepository crudRepository, CrudUserRepository userCrudRepository) {
+        this.mealCrudRepository = crudRepository;
+        this.userCrudRepository = userCrudRepository;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        return null;
+        meal.setUser(userCrudRepository.getReferenceById(userId));
+        if (meal.isNew()) {
+            return mealCrudRepository.save(meal);
+        }
+        Meal m = mealCrudRepository.getMealByIdAndUserId(meal.id(), userId);
+        if (m == null) {
+            return null;
+        }
+        return mealCrudRepository.save(meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return false;
+        return mealCrudRepository.delete(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return null;
+        return mealCrudRepository.getMealByIdAndUserId(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return null;
+        return mealCrudRepository.findAllByUserId(userId, Sort.by(Sort.Direction.DESC, "dateTime"));
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return null;
+        return mealCrudRepository.getBetweenHalfOpen(userId, startDateTime, endDateTime);
+    }
+
+    @Override
+    public Meal getWithUser(int id, int userId) {
+        return mealCrudRepository.getMealByIdAndUserIdWithUser(id, userId);
     }
 }
