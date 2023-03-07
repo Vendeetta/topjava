@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service.dataJpaTest;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.MealTestData;
@@ -10,8 +9,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.util.Collections;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
 import static ru.javawebinar.topjava.UserTestData.NOT_FOUND;
@@ -30,7 +28,7 @@ public class DataJpaUserServiceTest extends UserServiceTest {
     @Test
     public void getUserWithEmptyMeals() {
         User u = service.getWithMeals(UserTestData.GUEST_ID);
-        Assert.assertEquals(Collections.emptyList(), u.getMeals());
+        assertThat(u.getMeals()).isEmpty();
     }
 
     @Test
