@@ -14,18 +14,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
-    Meal getMealByIdAndUserId(int id, int userId);
+    @Query("SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
+    Meal getByIdAndUserId(@Param("id") int id, @Param("userId") int userId);
 
     @Transactional()
     @Modifying
     @Query("DELETE FROM Meal m WHERE m.id=:id and m.user.id=:userId")
     int delete(@Param("id") int id, @Param("userId") int userId);
 
-    List<Meal> findAllByUserId(int userId, Sort sort);
+    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId")
+    List<Meal> findAllByUserId(@Param("userId") int userId, Sort sort);
 
     @Query("SELECT m from Meal m WHERE m.user.id=:userId AND m.dateTime >= :start AND m.dateTime < :end ORDER BY m.dateTime DESC")
     List<Meal> getBetweenHalfOpen(@Param("userId") int userId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT m FROM Meal m LEFT JOIN FETCH User u on m.user.id = u.id WHERE m.id=:id AND m.user.id=:userId")
+    @Query("SELECT m FROM Meal m LEFT JOIN FETCH m.user WHERE m.id=:id AND m.user.id=:userId")
     Meal getMealByIdAndUserIdWithUser(@Param("id") int id, @Param("userId") int userId);
 }

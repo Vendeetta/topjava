@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.service.userTests;
+package ru.javawebinar.topjava.service.dataJpaTest;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.service.UserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class DataJpaUserServiceTest extends UserServiceTest {
     public void getWithMeals() {
         User u = service.getWithMeals(UserTestData.USER_ID);
         USER_MATCHER.assertMatch(u, UserTestData.user);
-        MEAL_MATCHER.assertMatch(u.getMeals(), MealTestData.userMeals);
+        MEAL_MATCHER.assertMatch(u.getMeals(), MealTestData.meals);
     }
 
     @Test
