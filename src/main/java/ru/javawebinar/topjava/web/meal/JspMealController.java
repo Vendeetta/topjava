@@ -53,7 +53,7 @@ public class JspMealController {
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
         model.addAttribute("meals", MealsUtil.getFilteredTos(service.getBetweenInclusive(startDate,
                 endDate, userId), SecurityUtil.authUserCaloriesPerDay(), startTime, endTime));
-        log.info("/meals");
+        log.info("/meals getAll");
         return "/meals";
     }
 
@@ -92,7 +92,7 @@ public class JspMealController {
         Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
         checkNew(meal);
-        log.info("create {} for user {}", meal, userId);
+        log.info("save new {} for user {}", meal, userId);
         service.create(meal, userId);
         return "redirect:/meals";
     }
