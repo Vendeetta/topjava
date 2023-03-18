@@ -7,15 +7,14 @@
 <jsp:include page="fragments/headTag.jsp"/>
 <head>
     <title><spring:message code="meal.title"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 </head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <hr/>
     <h2><spring:message code="meal.title"/></h2>
-    <form method="get" action="meals">
-        <input type="hidden" name="action" value="filter">
+    <form method="get" action="${pageContext.request.contextPath}/meals/filter">
         <dl>
             <dt><spring:message code="meal.fromDate"/></dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -51,15 +50,14 @@
             <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
             <tr data-meal-excess="${meal.excess}">
                 <td>
-                        <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
-                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
-                        <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
                         ${fn:formatDateTime(meal.dateTime)}
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="meals/update?id=${meal.id}"><spring:message code="meal.update"/></a></td>
-                <td><a href="meals/delete?id=${meal.id}"><spring:message code="meal.delete"/></a></td>
+                <td><a href="${pageContext.request.contextPath}/meals/update?id=${meal.id}"><spring:message
+                        code="meal.update"/></a></td>
+                <td><a href="${pageContext.request.contextPath}/meals/delete?id=${meal.id}"><spring:message
+                        code="meal.delete"/></a></td>
             </tr>
         </c:forEach>
     </table>

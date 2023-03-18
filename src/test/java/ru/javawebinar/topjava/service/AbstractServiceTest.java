@@ -22,7 +22,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles(resolver = ActiveDbProfileResolver.class, value = "testCache")
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public abstract class AbstractServiceTest {
 
     @ClassRule

@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.jpa;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
@@ -12,15 +13,6 @@ import java.util.List;
 @Repository
 @Transactional(readOnly = true)
 public class JpaUserRepository implements UserRepository {
-
-/*
-    @Autowired
-    private SessionFactory sessionFactory;
-
-    private Session openSession() {
-        return sessionFactory.getCurrentSession();
-    }
-*/
 
     @PersistenceContext
     private EntityManager em;
@@ -51,11 +43,9 @@ public class JpaUserRepository implements UserRepository {
 
     @Override
     public User getByEmail(String email) {
-        User users = em.createNamedQuery(User.BY_EMAIL, User.class)
+        return DataAccessUtils.singleResult(em.createNamedQuery(User.BY_EMAIL, User.class)
                 .setParameter(1, email)
-                .getSingleResult();
-        System.out.println(users);
-        return users;
+                .getResultList());
     }
 
     @Override
