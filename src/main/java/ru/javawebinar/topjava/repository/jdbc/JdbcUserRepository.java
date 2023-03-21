@@ -15,9 +15,6 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.ValidationUtil;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +32,6 @@ public class JdbcUserRepository implements UserRepository {
 
     private final SimpleJdbcInsert insertUser;
 
-    private final Validator validator;
 
     @Autowired
     public JdbcUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -45,8 +41,6 @@ public class JdbcUserRepository implements UserRepository {
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        this.validator = validatorFactory.getValidator();
     }
 
     @Override
@@ -63,6 +57,8 @@ public class JdbcUserRepository implements UserRepository {
                 """, parameterSource) == 0) {
 
             return null;
+        } else {
+            jdbcTemplate.update("DELETE FROM user_role WHERE user_id = ?", user.getId());
         }
         saveRoles(user);
         return user;
@@ -123,19 +119,20 @@ public class JdbcUserRepository implements UserRepository {
 
     private void saveRoles(User user) {
         int userId = user.getId();
-        jdbcTemplate.update("DELETE FROM user_role WHERE user_id = ?", userId);
         List<Role> rolesToUpdate = new ArrayList<>(user.getRoles());
-        jdbcTemplate.batchUpdate("INSERT INTO user_role VALUES (?, ?)", new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setInt(1, userId);
-                ps.setString(2, rolesToUpdate.get(i).toString());
-            }
+        if (!rolesToUpdate.isEmpty()) {
+            jdbcTemplate.batchUpdate("INSERT INTO user_role VALUES (?, ?)", new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    ps.setInt(1, userId);
+                    ps.setString(2, rolesToUpdate.get(i).toString());
+                }
 
-            @Override
-            public int getBatchSize() {
-                return rolesToUpdate.size();
-            }
-        });
+                @Override
+                public int getBatchSize() {
+                    return rolesToUpdate.size();
+                }
+            });
+        }
     }
 }

@@ -55,7 +55,6 @@ public class JspMealController extends AbstractMealController {
         int id = getId(request);
         Meal meal = get(id);
         request.setAttribute("meal", meal);
-        update(meal, id);
         return "mealForm";
     }
 

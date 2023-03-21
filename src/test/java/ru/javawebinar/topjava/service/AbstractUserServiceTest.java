@@ -32,6 +32,11 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    public void saveWithoutRole() {
+        service.create(guest);
+    }
+
+    @Test
     public void duplicateMailCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.USER)));
@@ -69,7 +74,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     public void update() {
         User updated = getUpdated();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
+        USER_MATCHER.assertMatch(service.getAll(), admin, guest, getUpdated());
     }
 
     @Test
@@ -99,6 +104,11 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Test
     public void getNotFoundByEmail() {
         assertThrows(NotFoundException.class, () -> service.getByEmail(NOT_FOUND_EMAIL));
+    }
+
+    @Test
+    public void getWithMeals() {
+
     }
 
 }

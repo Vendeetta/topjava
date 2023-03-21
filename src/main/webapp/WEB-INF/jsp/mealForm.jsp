@@ -5,18 +5,14 @@
 
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
-<head>
-    <title>Meal</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
-</head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <hr>
-    <h2><spring:message code='<%=request.getParameter("id") == null ? "meal.createMeal" : "meal.editMeal"%>'/></h2>
+    <h2><spring:message code="${requestScope.meal.id == null ? 'meal.createMeal' : 'meal.editMeal'}"/></h2>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <form method="post"
-          action="${pageContext.request.contextPath}/meals/<%=request.getParameter("id") == null ? "new" : "edit"%>">
+          action="meals/${requestScope.meal.id == null ? 'new' : 'edit'}">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="meal.dateTime"/></dt>

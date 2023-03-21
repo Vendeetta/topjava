@@ -1,16 +1,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="spring-db.xml"/>
 
-    <beans profile="jpa,datajpa">
+    <!--https://imhoratiu.wordpress.com/2017/01/26/spring-4-with-ehcache-3-how-to/-->
+    <bean id="ehCacheManager" class="org.springframework.cache.support.NoOpCacheManager"/>
+
+    <beans profile="jpa, datajpa">
         <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
             <property name="location" value="classpath:hibernateCache.properties"/>
         </bean>
-
-        <!--https://imhoratiu.wordpress.com/2017/01/26/spring-4-with-ehcache-3-how-to/-->
-        <bean id="ehCacheManager" class="org.springframework.cache.support.NoOpCacheManager"></bean>
     </beans>
 
 </beans>
