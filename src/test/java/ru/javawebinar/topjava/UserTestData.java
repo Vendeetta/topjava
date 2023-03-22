@@ -27,6 +27,10 @@ public class UserTestData {
         return new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Set.of(Role.USER, Role.ADMIN));
     }
 
+    public static User getNewWithoutRole() {
+        return new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Set.of());
+    }
+
     public static User getUpdated() {
         User updated = new User(user);
         updated.setEmail("update@gmail.com");
@@ -36,5 +40,19 @@ public class UserTestData {
         updated.setEnabled(false);
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
+    }
+
+    public static User getUpdatedWithoutRole() {
+        User updated = new User(guest);
+        updated.setName("newUpdatedName");
+        updated.setEmail("newUpdate@gmail.com");
+        updated.setPassword("newPass");
+        return updated;
+    }
+
+    public static User getWithNewRoles() {
+        User user = new User(admin);
+        user.setRoles(Collections.singletonList(Role.USER));
+        return user;
     }
 }

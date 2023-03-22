@@ -8,7 +8,6 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +31,21 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void saveWithoutRole() {
-        service.create(guest);
+    public void createWithoutRole() {
+        User user = service.create(getNewWithoutRole());
+        int id = user.id();
+        User newUser = getNewWithoutRole();
+        newUser.setId(id);
+        USER_MATCHER.assertMatch(user, newUser);
+        USER_MATCHER.assertMatch(service.get(id), newUser);
+    }
+
+    @Test
+    public void updateWithoutRole() {
+        User updated = getUpdatedWithoutRole();
+        int id = updated.id();
+        service.update(updated);
+        USER_MATCHER.assertMatch(service.get(id), getUpdatedWithoutRole());
     }
 
     @Test
@@ -85,7 +97,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void createWithException() throws Exception {
-//        Assume.assumeFalse(env.acceptsProfiles(Profiles.of("jdbc")));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
@@ -95,20 +106,14 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void updateRoles() {
-        User user = new User(admin);
-        user.setRoles(Collections.singletonList(Role.USER));
-        service.update(user);
-        USER_MATCHER.assertMatch(service.get(ADMIN_ID), user);
+        User userWithNewRoles = getWithNewRoles();
+        int id = userWithNewRoles.id();
+        service.update(userWithNewRoles);
+        USER_MATCHER.assertMatch(service.get(id), getWithNewRoles());
     }
 
     @Test
     public void getNotFoundByEmail() {
         assertThrows(NotFoundException.class, () -> service.getByEmail(NOT_FOUND_EMAIL));
     }
-
-    @Test
-    public void getWithMeals() {
-
-    }
-
 }

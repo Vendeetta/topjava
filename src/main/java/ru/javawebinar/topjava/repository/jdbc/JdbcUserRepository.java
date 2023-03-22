@@ -32,7 +32,6 @@ public class JdbcUserRepository implements UserRepository {
 
     private final SimpleJdbcInsert insertUser;
 
-
     @Autowired
     public JdbcUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertUser = new SimpleJdbcInsert(jdbcTemplate)
@@ -46,8 +45,8 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
-        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         ValidationUtil.validateEntity(user);
+        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
@@ -96,14 +95,9 @@ public class JdbcUserRepository implements UserRepository {
             int id = rs.getInt("id");
             User user = userMap.get(id);
             if (user == null) {
-                user = new User();
+                user = ROW_MAPPER.mapRow(rs, rs.getRow());
                 user.setId(id);
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setEnabled(rs.getBoolean("enabled"));
-                user.setRegistered(rs.getDate("registered"));
-                user.setCaloriesPerDay(rs.getInt("calories_per_day"));
+                userMap.put(id, user);
             }
 
             EnumSet<Role> roles = user.getRoles() == null ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(user.getRoles());
@@ -112,20 +106,19 @@ public class JdbcUserRepository implements UserRepository {
                 roles.add(Role.valueOf(role));
             }
             user.setRoles(roles);
-            userMap.put(id, user);
         }
         return new ArrayList<>(userMap.values());
     }
 
     private void saveRoles(User user) {
-        int userId = user.getId();
         List<Role> rolesToUpdate = new ArrayList<>(user.getRoles());
         if (!rolesToUpdate.isEmpty()) {
+            int userId = user.getId();
             jdbcTemplate.batchUpdate("INSERT INTO user_role VALUES (?, ?)", new BatchPreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
                     ps.setInt(1, userId);
-                    ps.setString(2, rolesToUpdate.get(i).toString());
+                    ps.setString(2, rolesToUpdate.get(i).name());
                 }
 
                 @Override

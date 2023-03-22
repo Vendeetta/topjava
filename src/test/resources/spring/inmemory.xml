@@ -6,4 +6,8 @@
     <context:component-scan base-package="ru.javawebinar.topjava.**.repository.inmemory"/>
 
     <bean class="ru.javawebinar.topjava.web.user.AdminRestController" id="adminRestController"/>
+    <bean class="ru.javawebinar.topjava.service.MealService" id="mealService"/>
+    <bean class="ru.javawebinar.topjava.web.meal.MealRestController" id="mealRestController">
+        <constructor-arg ref="mealService"/>
+    </bean>
 </beans>
