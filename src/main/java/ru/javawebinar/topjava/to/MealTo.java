@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.to;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
 
@@ -58,5 +59,22 @@ public class MealTo {
                 ", calories=" + calories +
                 ", excess=" + excess +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
+            return false;
+        }
+        MealTo that = (MealTo) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
     }
 }
