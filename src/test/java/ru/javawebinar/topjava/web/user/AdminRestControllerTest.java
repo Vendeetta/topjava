@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.web.user;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -90,7 +89,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithMeals() throws Exception {
-        Assumptions.assumeTrue(env.acceptsProfiles(Profiles.of(ru.javawebinar.topjava.Profiles.DATAJPA)));
+        Assumptions.assumeTrue(isDataJpaActive());
         ResultActions actions = perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-meals/"))
                 .andDo(print())
                 .andExpect(status().isOk())

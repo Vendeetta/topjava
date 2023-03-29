@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.user;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -37,7 +38,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(meals, CALORIES_PER_DAY)));
+                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(meals, user.getCaloriesPerDay())));
     }
 
     @Test
@@ -98,7 +99,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEALTO_MATCHER.contentJson(
-                        MealsUtil.getFilteredTos(List.of(meal3, meal2, meal1), CALORIES_PER_DAY,
+                        MealsUtil.getFilteredTos(List.of(meal3, meal2, meal1), user.getCaloriesPerDay(),
                                 startTime, endTime)));
     }
 
@@ -113,7 +114,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEALTO_MATCHER.contentJson(
-                        MealsUtil.getFilteredTos(List.of(meal3, meal2, meal1), CALORIES_PER_DAY,
+                        MealsUtil.getFilteredTos(List.of(meal3, meal2, meal1), user.getCaloriesPerDay(),
                                 null, null)));
     }
 
@@ -128,7 +129,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEALTO_MATCHER.contentJson(
-                        MealsUtil.getFilteredTos(meals, CALORIES_PER_DAY,
+                        MealsUtil.getFilteredTos(meals, user.getCaloriesPerDay(),
                                 startTime, endTime)));
     }
 
@@ -143,6 +144,6 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEALTO_MATCHER.contentJson(
-                        MealsUtil.getTos(meals, CALORIES_PER_DAY)));
+                        MealsUtil.getTos(meals, user.getCaloriesPerDay())));
     }
 }

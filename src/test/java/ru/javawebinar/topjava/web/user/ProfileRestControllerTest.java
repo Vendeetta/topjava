@@ -51,7 +51,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithMeals() throws Exception {
-        Assumptions.assumeTrue(env.acceptsProfiles(org.springframework.core.env.Profiles.of(ru.javawebinar.topjava.Profiles.DATAJPA)));
+        Assumptions.assumeTrue(isDataJpaActive());
         ResultActions actions = perform(MockMvcRequestBuilders.get(REST_URL + "/with-meals"))
                 .andDo(print())
                 .andExpect(status().isOk())

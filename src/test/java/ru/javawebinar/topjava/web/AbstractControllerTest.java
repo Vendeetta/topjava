@@ -51,4 +51,8 @@ public abstract class AbstractControllerTest {
     protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
     }
+
+    protected boolean isDataJpaActive() {
+        return env.acceptsProfiles(org.springframework.core.env.Profiles.of(ru.javawebinar.topjava.Profiles.DATAJPA));
+    }
 }
