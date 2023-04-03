@@ -1,3 +1,7 @@
+.table-bordered {
+    text-align: center;
+}
+
 dl {
     background: none repeat scroll 0 0 #FAFAFA;
     margin: 8px 0;
@@ -15,12 +19,18 @@ dd {
     vertical-align: top;
 }
 
-tr[data-meal-excess="false"] {
+#datatable tr[data-meal-excess="false"] {
     color: green;
 }
 
-tr[data-meal-excess="true"] {
+#datatable tr[data-meal-excess="true"] {
     color: red;
+}
+
+tr[checked="false"] {
+    text-decoration: line-through;
+    opacity: 0.5;
+    background: #CCC;
 }
 
 .fa {
@@ -32,9 +42,11 @@ html {
     position: relative;
     min-height: 100%;
 }
+
 body {
     margin-bottom: 60px !important; /* Margin bottom by footer height */
 }
+
 .footer {
     position: absolute;
     bottom: 0;

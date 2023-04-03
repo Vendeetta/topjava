@@ -9,6 +9,7 @@ const ctx = {
 $(function () {
     makeEditable(
         $("#datatable").DataTable({
+            // "stripeClasses": [],
             "paging": false,
             "info": true,
             "columns": [
@@ -45,3 +46,25 @@ $(function () {
         })
     );
 });
+
+// function enabled() {
+//     $("#checkbox").change(function() {
+//        console.log($(this).closest('tr').attr("id"))
+//     });
+//
+// }
+$(function enabled() {
+    $('#datatable').on('click', 'input[type=checkbox]', function () {
+        $.ajax({
+            url: ctx.ajaxUrl + $(this).closest('tr').attr("id"),
+            type: 'POST',
+            data: {
+                isEnabled: $(this).is(":checked"),
+            }
+        }).done(ctx.ajaxUrl, function () {
+            updateTable();
+            successNoty("Updated");
+        });
+    });
+});
+
