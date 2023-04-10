@@ -1,28 +1,15 @@
 package ru.javawebinar.topjava.to;
 
-import org.hibernate.validator.constraints.Range;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class MealTo extends BaseTo implements Serializable {
+public class MealTo extends BaseTo {
 
-    private static final long serialVersionUID = 1L;
-
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotBlank
-    @Size(min = 2, max = 120)
     private String description;
 
-    @Range(min = 10, max = 5000)
     private int calories;
 
     private boolean excess;
@@ -43,8 +30,8 @@ public class MealTo extends BaseTo implements Serializable {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public String getDescription() {
@@ -59,11 +46,8 @@ public class MealTo extends BaseTo implements Serializable {
         return calories;
     }
 
-    public void setCalories(String calories) {
-        if (calories.isEmpty()) {
-            calories = "0";
-        }
-        this.calories = Integer.parseInt(calories);
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 
     public boolean isExcess() {

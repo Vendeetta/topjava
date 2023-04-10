@@ -1,21 +1,51 @@
 const mealAjaxUrl = "profile/meals/";
 
-$("#startDate, #endDate").datetimepicker({
+$("#startDate").datetimepicker({
     timepicker: false,
     format: 'Y-m-d',
-    formatDate: 'Y-m-d'
+    onShow: function (ct) {
+        this.setOptions({
+            maxDate: jQuery('#endDate').val() ? jQuery('#endDate').val() : false
+        })
+    },
+    timepicker: false
 });
 
-$("#startTime, #endTime").datetimepicker({
+$("#endDate").datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d',
+    onShow: function (ct) {
+        this.setOptions({
+            minDate: jQuery('#startDate').val() ? jQuery('#startDate').val() : false
+        })
+    },
+    timepicker: false
+});
+
+$("#startTime").datetimepicker({
     datepicker: false,
     format: 'H:i',
-    formatTime: 'H:i'
+    onShow: function (ct) {
+        this.setOptions({
+            maxTime: jQuery('#endTime').val() ? jQuery('#endTime').val() : false
+        })
+    },
+    datepicker: false
+});
+
+$("#endTime").datetimepicker({
+    datepicker: false,
+    format: 'H:i',
+    onShow: function (ct) {
+        this.setOptions({
+            minTime: jQuery('#startTime').val() ? jQuery('#startTime').val() : false
+        })
+    },
+    datepicker: false
 });
 
 $("#dateTime").datetimepicker({
     format: 'Y-m-d H:i',
-    formatTime: 'H:i',
-    formatDate: 'Y-m-d',
 });
 
 // https://stackoverflow.com/a/5064235/548473
@@ -48,7 +78,10 @@ $(function () {
                 {
                     "data": "dateTime",
                     "render": function (date, type, row) {
-                        return date.replace("T", " ");
+                        if (type === "display") {
+                            return date.replace("T", " ").substring(0, 16);
+                        }
+                        return date;
                     }
                 },
                 {
