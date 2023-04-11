@@ -24,7 +24,7 @@ function updateRow(id) {
     $.get(ctx.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             if (key === "dateTime") {
-                value = value.toString().replace("T", " ").substring(0, 16);
+                value = formatDate(0, 16, value.toString())
             }
             form.find("input[name='" + key + "']").val(value);
         });
@@ -99,4 +99,8 @@ function failNoty(jqXHR) {
         layout: "bottomRight"
     });
     failedNote.show()
+}
+
+function formatDate(from, to, date) {
+    return date.replace("T", " ").substring(from, to);
 }

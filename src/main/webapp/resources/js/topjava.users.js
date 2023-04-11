@@ -62,7 +62,7 @@ $(function () {
                     "data": "registered",
                     "render": function (date, type, row) {
                         if (type === "display") {
-                            return date.substring(0, 10);
+                            return formatDate(0, 10, date)
                         }
                         return date;
                     }
