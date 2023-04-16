@@ -84,4 +84,10 @@ public class ValidationUtil {
                         .collect(Collectors.joining("<br>"))
         );
     }
+
+    public static String getBindingResultDetails(BindingResult result) {
+        return result.getFieldErrors().stream().map(s ->
+                        String.format("[%s] %s", s.getField(), s.getDefaultMessage()))
+                .collect(Collectors.joining("<br>"));
+    }
 }
