@@ -51,6 +51,28 @@ public class UserTestData {
         return updated;
     }
 
+    public static User getUpdatedWithNotValidData() {
+        User updated = new User(user);
+        updated.setEmail(" ");
+        updated.setName(" ");
+        updated.setCaloriesPerDay(1);
+        updated.setPassword(" ");
+        updated.setEnabled(false);
+        updated.setRoles(Collections.singletonList(Role.ADMIN));
+        return updated;
+    }
+
+    public static User getNewWithNotValidData() {
+        User invalidUser = new User();
+        invalidUser.setEmail(" ");
+        invalidUser.setName(" ");
+        invalidUser.setCaloriesPerDay(1);
+        invalidUser.setPassword(" ");
+        invalidUser.setEnabled(false);
+        invalidUser.setRoles(Collections.singletonList(Role.ADMIN));
+        return invalidUser;
+    }
+
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);
     }
